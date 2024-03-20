@@ -1,0 +1,121 @@
+{
+    "services": {
+        "LaunchPage": {
+            "adapter": {
+                "config": {
+                    "catalogs": [],
+                    "groups": [
+                        {
+                            "id": "commonreport-display",
+                            "title": "Common Report",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "commonreport-display",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "targetURL": "#commonreport-display",
+                                        "title": "Common Report",
+                                        "description": "Common Report"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": "analyticalreport-display",
+                            "title": "Analytical Report",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "analyticalreport-display",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "targetURL": "#analyticalreport-display",
+                                        "title": "Analytical Report",
+                                        "description": "Analytical Report"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": "analyticalchartreport-display",
+                            "title": "Analytical Chart Report",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "analyticalchartreport-display",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "targetURL": "#analyticalchartreport-display",
+                                        "title": "Analytical Chart Report",
+                                        "description": "Analytical Chart Report"
+                                    }
+                                }
+                            ]
+                        }
+                        
+                    ]
+                }
+            }
+        },
+        "NavTargetResolution": {
+            "config": {
+                "enableClientSideTargetResolution": true
+            }
+        },
+        "ClientSideTargetResolution": {
+            "adapter": {
+                "config": {
+                    "inbounds": {
+                        "commonreport-display": {
+                            "semanticObject": "commonreport",
+                            "action": "display",
+                            "signature": {
+                                "parameters": {},
+                                "additionalParameters": "allowed"
+                            },
+                            "resolutionResult": {
+                                "applicationType": "SAPUI5",
+                                "additionalInformation": "SAPUI5.Component=commonreport",
+                                "url": "/commonreport/webapp"
+                            }
+                        },
+                        "analyticalreport-display": {
+                            "semanticObject": "analyticalreport",
+                            "action": "display",
+                            "signature": {
+                                "parameters": {},
+                                "additionalParameters": "allowed"
+                            },
+                            "resolutionResult": {
+                                "applicationType": "SAPUI5",
+                                "additionalInformation": "SAPUI5.Component=analyticalreport",
+                                "url": "/analyticalreport/webapp"
+                            }
+                        },
+                        "analyticalchartreport-display": {
+                            "semanticObject": "analyticalchartreport",
+                            "action": "display",
+                            "signature": {
+                                "parameters": {},
+                                "additionalParameters": "allowed"
+                            },
+                            "resolutionResult": {
+                                "applicationType": "SAPUI5",
+                                "additionalInformation": "SAPUI5.Component=analyticalchartreport",
+                                "url": "/analyticalchartreport/webapp"
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+}
