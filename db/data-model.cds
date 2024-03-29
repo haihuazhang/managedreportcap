@@ -82,8 +82,30 @@ entity OrderItems : cuid {
   parent   : Association to Orders;
   book     : Association to Books  @mandatory  @assert.target;
   quantity : Integer;
-  @Semantics.amount.currencyCode: 'currency_code'
+
+                                   @Semantics.amount.currencyCode: 'currency_code'
   amount   : Decimal(9, 2);
-  @Semantics.currencyCode
+
+                                   @Semantics.currencyCode
   currency : Currency;
+}
+
+@cds.persistence.skip
+entity AllEntities {
+  key entityName  : String(150);
+      Description : String(150);
+      service     : String(150);
+      namespace   : String(150);
+}
+
+@cds.persistence.skip
+entity OrderUnmanaged {
+  key OrderNo  : String        @title: '{i18n>OrderNumber}';
+      buyer    : User;
+
+      @Semantics.amount.currencyCode: 'currency_code'
+      total    : Decimal(9, 2) @readonly;
+
+      @Semantics.currencyCode
+      currency : Currency;
 }

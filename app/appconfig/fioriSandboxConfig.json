@@ -58,7 +58,53 @@
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "id": "unmanagedcreport-display",
+                            "title": "Unmanaged Common Report",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "unmanagedcreport-display",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "targetURL": "#unmanagedcreport-display",
+                                        "title": "Unmanaged Common Report",
+                                        "description": "Unmanaged Common Report"
+                                    }
+                                },
+                                {
+                                    "id": "unmanagedanalyticalreport-display",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "targetURL": "#unmanagedanalyticalreport-display",
+                                        "title": "Unmanaged Analytical Report",
+                                        "description": "Unmanaged Analytical Report"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": "alpreport-display",
+                            "title": "Analytical List Page",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "alpreport-display",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "targetURL": "#alpreport-display",
+                                        "title": "Analytical List Page",
+                                        "description": "Analytical List Page"
+                                    }
+                                }
+                            ]
                         }
+                        
                         
                     ]
                 }
@@ -111,8 +157,46 @@
                                 "additionalInformation": "SAPUI5.Component=analyticalchartreport",
                                 "url": "/analyticalchartreport/webapp"
                             }
-                        }
-                        
+                        },
+                        "unmanagedcreport-display": {
+                            "semanticObject": "unmanagedcreport",
+                            "action": "display",
+                            "signature": {
+                                "parameters": {},
+                                "additionalParameters": "allowed"
+                            },
+                            "resolutionResult": {
+                                "applicationType": "SAPUI5",
+                                "additionalInformation": "SAPUI5.Component=unmanagedcommonreport",
+                                "url": "/unmanagedcommonreport/webapp"
+                            }
+                        },
+                        "alpreport-display": {
+                            "semanticObject": "alpreport",
+                            "action": "display",
+                            "signature": {
+                                "parameters": {},
+                                "additionalParameters": "allowed"
+                            },
+                            "resolutionResult": {
+                                "applicationType": "SAPUI5",
+                                "additionalInformation": "SAPUI5.Component=alpreport",
+                                "url": "/alpreport/webapp"
+                            }
+                        },
+                        "unmanagedanalyticalreport-display": {
+                            "semanticObject": "unmanagedanalyticalreport",
+                            "action": "display",
+                            "signature": {
+                                "parameters": {},
+                                "additionalParameters": "allowed"
+                            },
+                            "resolutionResult": {
+                                "applicationType": "SAPUI5",
+                                "additionalInformation": "SAPUI5.Component=unmanagedanalyticalreport",
+                                "url": "/unmanagedanalyticalreport/webapp"
+                            }
+                        }  
                     }
                 }
             }

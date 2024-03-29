@@ -2,16 +2,43 @@ using managedreport from '../db/data-model';
 
 service CatalogService {
     @readonly
-    entity Books      as projection on managedreport.Books;
+    entity Books           as projection on managedreport.Books;
 
     @readonly
-    entity Authors    as projection on managedreport.Authors;
+    @title: 'Authors'
+    entity Authors         as projection on managedreport.Authors;
 
     @readonly
-    entity Orders     as projection on managedreport.Orders;
+    @title: 'Orders'
+    entity Orders          as projection on managedreport.Orders;
 
     @readonly
-    entity OrderItems as projection on managedreport.OrderItems;
+    @title: 'Order Items'
+    entity OrderItems      as projection on managedreport.OrderItems;
+
+    @readonly
+    @title: 'All Entity Information'
+    entity AllEntities     as projection on managedreport.AllEntities;
+
+    @readonly
+    // @cds.persistence.skip
+    entity OrderUnmanaged as projection on managedreport.OrderUnmanaged;
+}
+
+service QueryService {
+    @readonly
+    entity AllEntities2    as projection on managedreport.AllEntities;
+
+    // entity OrderQuery as select from managedreport.Orders{
+    //     ID,
+    //     OrderNo,
+    //     buyer,
+    //     total,
+    //     currency,
+    //     sum(Items.quantity) as SumQuantity
+    // } group by ID,OrderNo,buyer,total,currency;
+
+    entity AllEntities3    as projection on managedreport.AllEntities;
 }
 
 
@@ -92,21 +119,21 @@ annotate CatalogService.Orders with @(
 
 annotate CatalogService.OrderItems with @(
     UI         : {
-        LineItem                  : [
+        LineItem                     : [
             {Value: ID},
             {Value: book_ID},
             {Value: quantity},
             {Value: amount}
 
         ],
-        SelectionFields           : [book_ID],
-        PresentationVariant #table: {
+        SelectionFields              : [book_ID],
+        PresentationVariant #table   : {
             $Type         : 'UI.PresentationVariantType',
             Visualizations: ['@UI.LineItem'],
             Text          : 'Table'
         },
 
-        Chart #chart1             : {
+        Chart #chart1                : {
             $Type     : 'UI.ChartDefinitionType',
             ChartType : #Column,
             Dimensions: [book_ID],
@@ -115,11 +142,57 @@ annotate CatalogService.OrderItems with @(
                 amount
             ]
         },
-        PresentationVariant #chart: {
+        Chart #chart2                : {
+            $Type     : 'UI.ChartDefinitionType',
+            ChartType : #Bar,
+            Dimensions: [book_ID],
+            Measures  : [quantity
+                                 // amount
+                        ]
+        },
+        Chart #sumQtyChart           : {
+            $Type    : 'UI.ChartDefinitionType',
+            ChartType: #Bar,
+            // Dimensions: [book_ID],
+            Measures : [quantity]
+        },
+        PresentationVariant #chart   : {
             $Type         : 'UI.PresentationVariantType',
-            Visualizations: ['@UI.Chart#chart1'],
+            Visualizations: ['@UI.Chart#chart1', ],
             Text          : 'Chart'
+        },
+        PresentationVariant #sumQtyPV: {
+            $Type         : 'UI.PresentationVariantType',
+            Visualizations: [
+                             // '@UI.LineItem',
+                            '@UI.Chart#sumQtyChart'],
+            Text          : 'Qty Sum'
+        },
+        DataPoint #sumQtyDP          : {
+            $Type: 'UI.DataPointType',
+            Value: quantity
+        },
+        KPI #KPIQuantity             : {
+            $Type           : 'UI.KPIType',
+            SelectionVariant: {
+                $Type        : 'UI.SelectionVariantType',
+                SelectOptions: [{
+                    PropertyName: book_ID,
+                    Ranges      : [{
+                        Sign  : #I,
+                        Option: #NE,
+                        Low   : ''
+                    }]
+                }]
+            },
+            DataPoint       : ![@UI.DataPoint#sumQtyDP],
+            Detail          : {
+                DefaultPresentationVariant: ![@UI.PresentationVariant#sumQtyPV],
+                SemanticObject            : 'test',
+                Action                    : 'display'
+            }
         }
+
     },
     Aggregation: {
         ApplySupported           : {
@@ -131,26 +204,35 @@ annotate CatalogService.OrderItems with @(
             AggregatableProperties: [
                 {Property: quantity},
                 {Property: amount}
+            ],
+            Transformations       : [
+                'aggregate',
+                // 'topcount',
+                // 'bottomcount',
+                'identity',
+                'concat',
+                'groupby',
+                'filter',
+                'search'
             ]
         },
         CustomAggregate #amount  : 'Edm.Decimal',
         CustomAggregate #quantity: 'Edm.Int'
+    },
+    Analytics  : {
+        AggregatedProperty #quantity: {
+            $Type               : 'Analytics.AggregatedPropertyType',
+            Name                : 'SumQTY',
+            AggregationMethod   : 'sum',
+            AggregatableProperty: quantity
+        },
+        AggregatedProperty #amount  : {
+            $Type               : 'Analytics.AggregatedPropertyType',
+            Name                : 'SumAmount',
+            AggregationMethod   : 'sum',
+            AggregatableProperty: amount
+        }
     }
-    // Analytics: {
-    //     // AggregatedProperty : {
-    //     //     $Type : 'Analytics.AggregatedPropertyType',
-    //     //     Name : 'SumQTY',
-    //     //     AggregationMethod : 'sum',
-    //     //     AggregatableProperty : quantity
-    //     // },
-    //     // AnalyticalContext : [
-    //     //     {
-    //     //         $Type : 'Analytics.AnalyticalContextType',
-    //     //         Measure: true,
-                
-    //     //     },
-    //     // ],
-    // }
 ) {
     amount    @Analytics.Measure        @Aggregation.default: #SUM  @Measures.ISOCurrency: currency_code;
     quantity  @Analytics.Measure        @Aggregation.default: #SUM;
@@ -173,4 +255,34 @@ annotate CatalogService.OrderItems with @(
 
 annotate CatalogService.Books with {
     ID @(Common: {Text: title})
+};
+
+
+annotate CatalogService.OrderUnmanaged with @(
+    UI         : {
+        LineItem       : [
+            {Value: OrderNo},
+            {Value: buyer},
+            {Value: total}
+        ],
+        SelectionFields: [
+            OrderNo,
+            buyer
+        ],
+    },
+    Aggregation: {
+        ApplySupported        : {
+            $Type              : 'Aggregation.ApplySupportedType',
+            GroupableProperties: [
+                buyer,
+                OrderNo
+            ]
+        },
+        CustomAggregate #total: 'Edm.Decimal'
+    }
+)
+
+
+{
+    total  @Analytics.Measure  @Aggregation.default: #SUM  @Measures.ISOCurrency: currency_code
 };

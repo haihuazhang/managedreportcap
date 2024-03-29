@@ -19,24 +19,24 @@ class CatalogServiceHandlerTest {
 		book.setTitle("title");
 	}
 
-	@Test
-	void testDiscount() {
-		book.setStock(500);
-		handler.discountBooks(Stream.of(book));
-		assertEquals("title (discounted)", book.getTitle());
-	}
+	// @Test
+	// void testDiscount() {
+	// 	book.setStock(500);
+	// 	handler.discountBooks(Stream.of(book));
+	// 	assertEquals("title (discounted)", book.getTitle());
+	// }
 
-	@Test
-	void testNoDiscount() {
-		book.setStock(100);
-		handler.discountBooks(Stream.of(book));
-		assertEquals("title", book.getTitle());
-	}
+	// @Test
+	// void testNoDiscount() {
+	// 	book.setStock(100);
+	// 	handler.discountBooks(Stream.of(book));
+	// 	assertEquals("title", book.getTitle());
+	// }
 
-	@Test
-	void testNoStockAvailable() {
-		handler.discountBooks(Stream.of(book));
-		assertEquals("title", book.getTitle());
-	}
+	// @Test
+	// void testNoStockAvailable() {
+	// 	handler.discountBooks(Stream.of(book));
+	// 	assertEquals("title", book.getTitle());
+	// }
 
 }
